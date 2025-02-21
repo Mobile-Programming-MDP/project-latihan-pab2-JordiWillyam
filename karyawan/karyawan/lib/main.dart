@@ -70,7 +70,8 @@ class MyHomePage extends StatelessWidget {
                             Text(
                                 "Hobi: ${snapshot.data![index].hobi.join(", ")}"),
                             // Panggil hobi index ke 0
-                            Text("Hobi: ${snapshot.data![index].hobi[0]}"),
+                            if (snapshot.data![index].hobi.length > 1)
+                              Text("Hobi: ${snapshot.data![index].hobi[0]}"),
                           ],
                         ),
                       );
