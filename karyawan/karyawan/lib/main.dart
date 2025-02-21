@@ -69,6 +69,8 @@ class MyHomePage extends StatelessWidget {
                                 "Alamat: ${snapshot.data![index].alamat.jalan}, ${snapshot.data![index].alamat.kota}, ${snapshot.data![index].alamat.provinsi}"),
                             Text(
                                 "Hobi: ${snapshot.data![index].hobi.join(", ")}"),
+                            // Panggil hobi index ke 0
+                            Text("Hobi: ${snapshot.data![index].hobi[0]}"),
                           ],
                         ),
                       );
