@@ -55,7 +55,7 @@ class HomeScreenState extends State<HomeScreen> {
   }
 }
 
-Widget buildMoviesList(String title, List<Movie> movies) {
+Widget buildMoviesList(List<Movie> movies, String title) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -64,56 +64,46 @@ Widget buildMoviesList(String title, List<Movie> movies) {
         child: Text(
           title,
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),)
+        ),
+        ),
+        SizedBox(height: 200,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: movies.length,
+          itemBuilder: (BuildContext context, int index) {
+            final Movie movie = movies[index];
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailScreen(movie: movie),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.network(
+                      'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                      width: 150,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      movie.title.length > 14 ? '${movie.title.substring(0, 10)}...' : movie.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+        ),
         ],
       );
-}
-class SectionTitle extends StatelessWidget {
-  final String title;
-
-  SectionTitle({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-}
-
-class MovieList extends StatelessWidget {
-  final List<Movie> movies;
-
-  MovieList({required this.movies});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: movies.length,
-        itemBuilder: (context, index) {
-          final movie = movies[index];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Image.network(
-                  movie.posterUrl,
-                  height: 150,
-                ),
-                SizedBox(height: 8),
-                Text(movie.title),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
 }
