@@ -66,7 +66,7 @@ Widget buildMoviesList(List<Movie> movies, String title) {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         ),
-        SizedBox(height: 200,
+        SizedBox(height: 221,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: movies.length,
@@ -93,10 +93,12 @@ Widget buildMoviesList(List<Movie> movies, String title) {
                       fit: BoxFit.cover,
                     ),
                     SizedBox(height: 5),
+                    Expanded(
+                      child:
                     Text(
                       movie.title.length > 14 ? '${movie.title.substring(0, 10)}...' : movie.title,
                       style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    ),)
                   ],
                 ),
               ),
