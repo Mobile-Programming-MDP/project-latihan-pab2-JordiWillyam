@@ -12,7 +12,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class SearchScreenState extends State<SearchScreen> {
-  final ApiService _apiService = ApiService();
+  final ApiService apiService = ApiService();
   final TextEditingController _searchController = TextEditingController();
   List<Movie> _searchResults = [];
   @override
@@ -35,7 +35,7 @@ class SearchScreenState extends State<SearchScreen> {
       return;
     }
     final List<Map<String, dynamic>> searchData =
-        await _apiService._searchMovies(_searchController.text);
+        await apiService.searchMovies(_searchController.text);
     setState(() {
       _searchResults = searchData.map((e) => Movie.fromJson(e)).toList();
     });

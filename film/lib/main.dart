@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Pilem',
+      title: 'Film',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
@@ -31,8 +31,8 @@ class MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   final List<Widget> _screens = [
     const HomeScreen(),
-    const search_screen(),
-    const favorite_screen(),
+    const SearchScreen(),
+    const FavoriteScreen(),
   ];
   void _onItemTapped(int index) {
     setState(() {
