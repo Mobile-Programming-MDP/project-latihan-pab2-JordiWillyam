@@ -20,14 +20,14 @@ class DetailScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
-                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                'https://image.tmdb.org/t/p/w500${movie.backdropPath}',
                 height: 300,
               ),
               const SizedBox(height: 20),
-
               Text(
                 'Overview: ${movie.overview}',
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Text(movie.overview),
@@ -36,7 +36,8 @@ class DetailScreen extends StatelessWidget {
                 children: [
                   const Icon(Icons.calendar_month, color: Colors.blue),
                   const SizedBox(width: 10),
-                  const Text('Release Date:', 
+                  const Text(
+                    'Release Date:',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 10),
@@ -48,27 +49,25 @@ class DetailScreen extends StatelessWidget {
                 children: [
                   const Icon(Icons.star, color: Colors.amber),
                   const SizedBox(width: 10),
-                  const Text('Rating:', 
+                  const Text(
+                    'Rating:',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 10),
                   Text(movie.voteAverage.toString()),
                 ],
               ),
-
               Text(movie.releaseDate),
               Text(
                 'Title: ${movie.title}',
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 8),
-
               Text(
                 'Release Date: ${movie.releaseDate}',
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 8),
-
             ],
           ),
         ),

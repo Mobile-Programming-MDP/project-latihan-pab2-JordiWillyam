@@ -15,6 +15,7 @@ class SearchScreenState extends State<SearchScreen> {
   final ApiService apiService = ApiService();
   final TextEditingController _searchController = TextEditingController();
   List<Movie> _searchResults = [];
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +35,7 @@ class SearchScreenState extends State<SearchScreen> {
       });
       return;
     }
+
     final List<Map<String, dynamic>> searchData =
         await apiService.searchMovies(_searchController.text);
     setState(() {
