@@ -1,5 +1,3 @@
-import 'package:film/models/movie.dart';
-import 'package:film/screens/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:film/models/movie.dart';
 import 'package:film/screens/detail_screen.dart';
@@ -12,10 +10,9 @@ class SearchScreen extends StatefulWidget {
 }
 
 class SearchScreenState extends State<SearchScreen> {
-  final ApiService apiService = ApiService();
+  final ApiService _apiService = ApiService();
   final TextEditingController _searchController = TextEditingController();
   List<Movie> _searchResults = [];
-
   @override
   void initState() {
     super.initState();
@@ -35,15 +32,11 @@ class SearchScreenState extends State<SearchScreen> {
       });
       return;
     }
-
     final List<Map<String, dynamic>> searchData =
-        await apiService.searchMovies(_searchController.text);
-
-    if (searchData.isNotEmpty) {
-      setState(() {
-        _searchResults = searchData.map((e) => Movie.fromJson(e)).toList();
-      });
-    }
+        await _apiService.searchMovies(_searchController.text);
+    setState(() {
+      _searchResults = searchData.map((e) => Movie.fromJson(e)).toList();
+    });
   }
 
   @override
