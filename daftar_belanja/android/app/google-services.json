@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "118098998644",
+    "firebase_url": "https://first-app-jordi-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "first-app-jordi",
+    "storage_bucket": "first-app-jordi.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118098998644:android:77fccf1330bb7fb16a2821",
+        "android_client_info": {
+          "package_name": "com.example.daftar_belanja"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBByw7anl-h6Koy7VEV7JGtj1Pgcx8LCAk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
