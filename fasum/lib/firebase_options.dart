@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     projectId: 'fasum-app-jordi',
     storageBucket: 'fasum-app-jordi.firebasestorage.app',
   );
+
 }
