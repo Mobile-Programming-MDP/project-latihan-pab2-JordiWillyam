@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <!-- Tambahkan Izin untuk akses lokasi pada android -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/><!-- Added permission for location access -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/><!-- Added permission for location access -->
     <application
         android:label="fasum"
         android:name="${applicationName}"
