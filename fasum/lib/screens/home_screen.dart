@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fasum/screens/add_post_screen.dart';
 import 'package:fasum/screens/sign_in_screen.dart';
@@ -9,16 +10,15 @@ import 'package:intl/intl.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  //Fungsi Untuk mengubah tanggal pada database dan menampilkannya seperti timestamp
   String formatTime(DateTime dateTime) {
     final now = DateTime.now();
     final diff = now.difference(dateTime);
     if (diff.inSeconds < 60) {
-      return '${diff.inSeconds} seconds ago';
+      return '${diff.inSeconds} secs ago';
     } else if (diff.inMinutes < 60) {
-      return '${diff.inMinutes} minutes ago';
+      return '${diff.inMinutes} mins ago';
     } else if (diff.inHours < 24) {
-      return '${diff.inHours} hours ago';
+      return '${diff.inHours} hrs ago';
     } else {
       return DateFormat('dd/MM/yyyy').format(dateTime);
     }
@@ -26,9 +26,8 @@ class HomeScreen extends StatelessWidget {
 
   Future<void> signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => SignInScreen()));
+        MaterialPageRoute(builder: (context) => const SignInScreen()));
   }
 
   @override
@@ -39,16 +38,17 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
-              onPressed: () {
-                signOut(context);
-              },
-              icon: const Icon(Icons.logout)),
+            onPressed: () {
+              signOut(context);
+            },
+            icon: const Icon(Icons.logout),
+          )
         ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('posts')
-            //.orderBy('createdAt', descending: true)
+            .collection("posts")
+            .orderBy('createdAt', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
