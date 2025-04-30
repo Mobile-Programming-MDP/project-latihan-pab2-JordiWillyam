@@ -33,10 +33,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -63,6 +60,15 @@ class DefaultFirebaseOptions {
     appId: '1:784425301648:android:579df0abc64cf9bc8d0a15',
     messagingSenderId: '784425301648',
     projectId: 'fasum-app-jordi',
+    storageBucket: 'fasum-app-jordi.firebasestorage.app',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDogXTHprevWL9qu1sSxd4RgBrbWWszvJk',
+    appId: '1:784425301648:web:897ee617a34b512d8d0a15',
+    messagingSenderId: '784425301648',
+    projectId: 'fasum-app-jordi',
+    authDomain: 'fasum-app-jordi.firebaseapp.com',
     storageBucket: 'fasum-app-jordi.firebasestorage.app',
   );
 

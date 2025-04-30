@@ -61,7 +61,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } else {
       try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text, password: _passwordController.text);
+            email: _emailController.text, 
+            password: _passwordController.text);
         if (mounted) {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => const SignInScreen()));
