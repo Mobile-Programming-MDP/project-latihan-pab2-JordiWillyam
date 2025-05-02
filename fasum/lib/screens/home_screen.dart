@@ -68,8 +68,19 @@ class HomeScreen extends StatelessWidget {
               final latitude = data['latitude'];
               final longitude = data['longitude'];
               final category = data['category'] ?? "Lainnya";
-              //parse ke DateTime
-              final createdAt = DateTime.parse(createdAtStr);
+
+              // Parse createdAt based on its type
+              DateTime createdAt;
+              if (createdAtStr is Timestamp) {
+                createdAt = createdAtStr.toDate();
+              } else if (createdAtStr is String) {
+                createdAt = DateTime.parse(createdAtStr);
+              } else {
+                // Handle error or set a default value
+                createdAt = DateTime.now();
+              }
+              final createdAtValue = DateTime.parse("createdAt");
+
               String heroTag =
                   'fasum-image-${createdAt.millisecondsSinceEpoch}';
               return InkWell(
