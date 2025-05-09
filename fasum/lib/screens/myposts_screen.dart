@@ -4,20 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fasum/screens/add_post_screen.dart';
 import 'package:fasum/screens/detail_screen.dart';
 import 'package:fasum/screens/edit_post_screen.dart';
-import 'package:fasum/screens/myposts_screen.dart';
 import 'package:fasum/screens/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class MyPostScreen extends StatefulWidget {
+  const MyPostScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<MyPostScreen> createState() => _MyPostScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MyPostScreenState extends State<MyPostScreen> {
   String? selectedCategory;
   //ambil dari add_post_screen
   List<String> categories = [
@@ -320,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text("My Posts"),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
@@ -353,10 +352,9 @@ class _HomeScreenState extends State<HomeScreen> {
               final data = doc.data();
               final category = data['category'] ?? 'Lainnya';
               // Filter berdasarkan user yang aktif
-              final cu = FirebaseAuth.instance.currentUser;
-              return cu?.uid == data['userId'] && selectedCategory == null ||
-                  selectedCategory == category;
-              // return selectedCategory == null || selectedCategory == category;
+              // final cu = FirebaseAuth.instance.currentUser;
+              // return cu?.uid == data['userId'];
+              return selectedCategory == null || selectedCategory == category;
             }).toList();
 
             if (posts.isEmpty) {
@@ -488,83 +486,83 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
 
                                       //Comment Button
-                                      Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              // Implement comment functionality
-                                              _showComments(posts[index].id);
-                                            },
-                                            child: Icon(
-                                              Icons.comment,
-                                              size: 20,
-                                              color: (data['comments'] ?? [])
-                                                      .contains(
-                                                          currentUser?.uid)
-                                                  ? Colors.blue
-                                                  : Colors.grey,
-                                            ),
-                                          ),
-                                          if ((data['comments'] ?? []).length >
-                                              0)
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  width: 8,
-                                                ),
-                                                Text(
-                                                    '${(data['comments'] ?? []).length}', // Tampilkan jumlah komentar
-                                                    style: const TextStyle(
-                                                        fontSize: 12)),
-                                              ],
-                                            ),
-                                        ],
-                                      ),
+                                      // Row(
+                                      //   children: [
+                                      //     GestureDetector(
+                                      //       onTap: () {
+                                      //         // Implement comment functionality
+                                      //         _showComments(posts[index].id);
+                                      //       },
+                                      //       child: Icon(
+                                      //         Icons.comment,
+                                      //         size: 20,
+                                      //         color: (data['comments'] ?? [])
+                                      //                 .contains(
+                                      //                     currentUser?.uid)
+                                      //             ? Colors.blue
+                                      //             : Colors.grey,
+                                      //       ),
+                                      //     ),
+                                      //     if ((data['comments'] ?? []).length >
+                                      //         0)
+                                      //       Row(
+                                      //         children: [
+                                      //           SizedBox(
+                                      //             width: 8,
+                                      //           ),
+                                      //           Text(
+                                      //               '${(data['comments'] ?? []).length}', // Tampilkan jumlah komentar
+                                      //               style: const TextStyle(
+                                      //                   fontSize: 12)),
+                                      //         ],
+                                      //       ),
+                                      //   ],
+                                      // ),
 
                                       // Menggunakan FutureBuilder untuk menghitung jumlah komentar
-                                      // FutureBuilder<QuerySnapshot>(
-                                      //   future: FirebaseFirestore.instance
-                                      //       .collection('posts')
-                                      //       .doc(posts[index].id)
-                                      //       .collection('comments')
-                                      //       .get(),
-                                      //   builder: (context, snapshot) {
-                                      //     final commentCount =
-                                      //         snapshot.data?.docs.length ?? 0;
-                                      //     final hasCommented =
-                                      //         (data['comments'] ?? [])
-                                      //             .contains(currentUser?.uid);
+                                      FutureBuilder<QuerySnapshot>(
+                                        future: FirebaseFirestore.instance
+                                            .collection('posts')
+                                            .doc(posts[index].id)
+                                            .collection('comments')
+                                            .get(),
+                                        builder: (context, snapshot) {
+                                          final commentCount =
+                                              snapshot.data?.docs.length ?? 0;
+                                          final hasCommented =
+                                              (data['comments'] ?? [])
+                                                  .contains(currentUser?.uid);
 
-                                      //     return Row(
-                                      //       children: [
-                                      //         GestureDetector(
-                                      //           onTap: () {
-                                      //             _showComments(
-                                      //                 posts[index].id);
-                                      //           },
-                                      //           child: Icon(
-                                      //             Icons.comment,
-                                      //             size: 20,
-                                      //             color: hasCommented
-                                      //                 ? Colors.blue
-                                      //                 : Colors.grey,
-                                      //           ),
-                                      //         ),
-                                      //         if (commentCount > 0)
-                                      //           Row(
-                                      //             children: [
-                                      //               const SizedBox(width: 8),
-                                      //               Text(
-                                      //                 '$commentCount',
-                                      //                 style: const TextStyle(
-                                      //                     fontSize: 12),
-                                      //               ),
-                                      //             ],
-                                      //           ),
-                                      //       ],
-                                      //     );
-                                      //   },
-                                      // ),
+                                          return Row(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  _showComments(
+                                                      posts[index].id);
+                                                },
+                                                child: Icon(
+                                                  Icons.comment,
+                                                  size: 20,
+                                                  color: hasCommented
+                                                      ? Colors.blue
+                                                      : Colors.grey,
+                                                ),
+                                              ),
+                                              if (commentCount > 0)
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(width: 8),
+                                                    Text(
+                                                      '$commentCount',
+                                                      style: const TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+                                                  ],
+                                                ),
+                                            ],
+                                          );
+                                        },
+                                      ),
 
                                       //Menu Edit dan Hapus
                                       if (currentUser != null &&
