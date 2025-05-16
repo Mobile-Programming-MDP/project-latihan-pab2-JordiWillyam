@@ -137,6 +137,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
       final content = Content.multi([
         DataPart('image/jpeg', imageBytes),
         TextPart(
+          // 'Berdasarkan gambar ini, identifikasi satu genre utama dari gambar manga diatas '
+          // 'diantara daftar berikut: Action, Adventure, Comedy, Drama, Fantasy, Horror, '
+          // 'Mystery, Psychological, Romance, Sci-Fi, Slice of Life, Sports, Supernatural, '
+          // 'Pilih satu genre yang paling sesuai dengan gambar tersebut. '
+          // 'Cari dan buatkan sinopsis dari manga tersebut. '
+          // 'Format output yang diinginkan:\n'
+          // 'Genre: [satu genre yang dipilih]\n'
+          // 'Sinopsis: [sinopsis manga]\n'
+          // 'Jangan menambahkan output lain di luar format ini. Output harus dalam format plaintext\n\n'
           'Berdasarkan foto ini, identifikasi satu kategori utama kerusakan fasilitas umum '
           'dari daftar berikut: Jalan Rusak, Marka Pudar, Lampu Mati, Trotoar Rusak, '
           'Rambu Rusak, Jembatan Rusak, Sampah Menumpuk, Saluran Tersumbat, Sungai Tercemar, '
