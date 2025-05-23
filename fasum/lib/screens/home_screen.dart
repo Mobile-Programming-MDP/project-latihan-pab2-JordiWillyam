@@ -7,8 +7,10 @@ import 'package:fasum/screens/edit_post_screen.dart';
 import 'package:fasum/screens/myposts_screen.dart';
 import 'package:fasum/screens/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -164,10 +166,50 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         // Like the post
         likes.add(currentUser.uid);
+        // Send notification to the post owner
+        sendLikeNotification(postId);
       }
 
       await postRef.update({'likes': likes});
     }
+  }
+
+  //send notification to post owner
+  void sendLikeNotification(String postId) async {
+    final postSnapshot =
+        await FirebaseFirestore.instance.collection("posts").doc(postId).get();
+    final postOwnerData = postSnapshot.data()!;
+    final postOwnerId = postOwnerData['userId'];
+    final postOwnerSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(postOwnerId)
+        .get();
+    final postOwnerToken = postOwnerSnapshot.data()?['token'];
+    if (postOwnerToken != null) {
+      sendNotificationDevice(
+          postOwnerToken,
+          'New Like on Your Post',
+          "Someone liked your post with topic ${postOwnerData['category']}",
+          postOwnerData['image']);
+    }
+  }
+
+  Future<void> sendNotificationDevice(
+      String token, String title, String body, String image) async {
+    final url = Uri.parse('https://fasum-cloud-teal.vercel.app/send-to-device');
+    //ganti dengan url vercel masing-masing
+    await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "token": token,
+        "title": title,
+        "body": body,
+        //"senderPhotoUrl": image
+      }),
+    );
   }
 
   void _showComments(String postId) {
@@ -329,9 +371,18 @@ class _HomeScreenState extends State<HomeScreen> {
       return FirebaseFirestore.instance
           .collection("posts")
           .where("category", isEqualTo: selectedCategory)
+          .where("userId", isNotEqualTo: _currentUserId)
           .orderBy('createdAt', descending: true)
           .snapshots();
     }
+  }
+
+  //simpan token ke firestore
+  void saveToken(String token, String uid) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .update({'token': token});
   }
 
   @override
@@ -340,6 +391,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       _currentUserId = currentUser.uid;
+      // Mendapatkan token FCM
+      FirebaseMessaging.instance.getToken().then((token) {
+        if (token != null) {
+          saveToken(token, currentUser.uid);
+          print("FCM Token: $token");
+        }
+      });
     }
   }
 

@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:http/http.dart' as http;
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({Key? key}) : super(key: key);
@@ -23,11 +24,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
   bool _isUploading = false;
   double? _latitude;
   double? _longitude;
-  // variabel untuk kategori dan deskripsi AI
   String? _aiCategory;
   String? _aiDescription;
   bool _isGenerating = false;
-
   List<String> categories = [
     'Jalan Rusak',
     'Marka Pudar',
@@ -47,7 +46,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
     'Banjir',
     'Lainnya',
   ];
-
   void _showCategorySelection() {
     showModalBottomSheet(
       context: context,
@@ -129,8 +127,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
       //RequestOptions ro = const RequestOptions(apiVersion: 'v1');
       final model = GenerativeModel(
         model: 'gemini-2.0-flash',
-        apiKey:
-            'AIzaSyCoF4SJGIhTj3k-yRtoqHW2akLDEkPPJZY', //gunakan api key gemini anda
+        apiKey: 'AIzaSyCoF4SJGIhTj3k-yRtoqHW2akLDEkPPJZY',
+        //gunakan api key gemini anda
         //requestOptions: ro,
       );
       final imageBytes = await _image!.readAsBytes();
@@ -160,7 +158,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
           'Jangan menambahkan output lain di luar format ini. Output harus dalam format plaintext\n\n',
         ),
       ]);
-
       final response = await model.generateContent([content]);
       final aiText = response.text;
       print("AI TEXT: $aiText");
@@ -233,6 +230,39 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
   }
 
+  Future<void> sendNotificationToTopic(String body, String senderName) async {
+    final url = Uri.parse(
+        'https://fasum-cloud-teal.vercel.app/send-to-topic'); //ganti dengan url vercel masing-masing
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "topic": "berita-fasum",
+        "title": "🔔 Laporan Baru",
+        "body": body,
+        "senderName": senderName,
+        "senderPhotoUrl":
+            "https://t3.ftcdn.net/jpg/03/53/83/92/360_F_353839266_8yqhN0548cGxrl4VOxngsiJzDgrDHxjG.jpg",
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('✅ Notifikasi berhasil dikirim')),
+        );
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('❌ Gagal kirim notifikasi: ${response.body}')),
+        );
+      }
+    }
+  }
+
   Future<void> _submitPost() async {
     if (_base64Image == null || _descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -266,6 +296,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
         'userId': uid,
       });
       if (!mounted) return;
+
+      sendNotificationToTopic(_descriptionController.text, fullName);
+
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Post uploaded successfully!')),
@@ -384,7 +417,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   ],
                 ),
               ),
-
             // Kategori dan tombol refresh
             if (_aiCategory != null && !_isGenerating)
               Padding(
@@ -415,7 +447,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   ],
                 ),
               ),
-
             // TextField untuk deskripsi
             Offstage(
               offstage: _isGenerating,
@@ -435,7 +466,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
               ),
             ),
             const SizedBox(height: 24),
-
             // Tombol kirim post
             ElevatedButton(
               onPressed: _isUploading ? null : _submitPost,

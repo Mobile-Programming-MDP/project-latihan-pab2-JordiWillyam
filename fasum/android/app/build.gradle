@@ -14,8 +14,8 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        // isCoreLibraryDesugaringEnabled = true
-        isCoreLibraryDesugaringEnabled = true
+        // isCoreLibraryDesugaringEnabled = true jika ekstensi gradlenya .kts
+        coreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
